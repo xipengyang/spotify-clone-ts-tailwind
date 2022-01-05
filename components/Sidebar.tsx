@@ -38,7 +38,8 @@ const Sidebar = () => {
         </button>
         <hr className="border-t-[0.1px] border-gray-900" />
 
-        <p className="cursor-pointer hover:text-white"></p>
+        <p className="cursor-pointer hover:text-white"> Play list name</p>
+        <p className="cursor-pointer hover:text-white"> Play list name</p>
       </div>
     </div>
   );
