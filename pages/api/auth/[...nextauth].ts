@@ -98,6 +98,7 @@ export default NextAuth({
     // async signIn({ user, account, profile, email, credentials }) { return true },
     // async redirect({ url, baseUrl }) { return baseUrl },
     async session({ session, token, user }) {
+        console.log("session -  token -" + JSON.stringify(token) + " token -" + token);
       if (token.accessToken) {
         const thisuser = {
           ...session.user,
@@ -111,32 +112,27 @@ export default NextAuth({
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      console.log("jwt callback token - " + token + " account -" + account);
-
-      let thisToken: UserAccessToken = {
-        ...token,
-        accessToken: undefined,
-        refreshToken: undefined,
-        username: undefined,
-        accessTokenExpires: 0, // so when we do comparision later the current value is always greater than the init value.
-      };
+    // The arguments user, account, profile and isNewUser are only passed the first time this callback is called on a new session
+    //. In subsequent calls, only token will be available
 
       if (account && user) {
         return {
-          ...thisToken,
+          ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           username: account.providerAccountId,
           accessTokenExpires: account.expires_at
             ? account.expires_at * 1000
-            : thisToken.accessTokenExpires,
+            : 0 
         };
       }
-
-      if (Date.now() < thisToken.accessTokenExpires) return thisToken;
-
-      // refresh token
-      return await refreshAccessToken(thisToken);
+      if(token.accessToken && token.accessTokenExpires) 
+      {
+      if (Date.now() < Number(token.accessTokenExpires)) {
+          return await refreshAccessToken(token as UserAccessToken);
+        }
+      }
+      return token;
     },
   },
 

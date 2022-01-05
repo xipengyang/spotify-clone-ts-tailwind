@@ -6,8 +6,11 @@ import {
   RssIcon,
   SearchIcon,
 } from "@heroicons/react/outline";
+import { useSession } from "next-auth/react";
 
 const Sidebar = () => {
+  const { data: session } = useSession();
+
   return (
     <div className="text-gray-500 p-5 text-sm border-r border-gray-900">
       <div className="space-y-4">
