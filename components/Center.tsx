@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { playlistIdState, playlistState } from "../atoms/playlistAtom";
 import useSpotify from "../hooks/useSpotify";
-import Song from "./Song";
+import Playlist from "./Playlist";
 
 const Center: React.FC = () => {
   const { data: session } = useSession();
@@ -48,7 +48,7 @@ const Center: React.FC = () => {
         </div>
       </section>
       <div>
-        <Song></Song>
+        <Playlist></Playlist>
       </div>
     </div>
   );
