@@ -1,15 +1,17 @@
 import NextAuth from "next-auth";
 import { JWT } from "next-auth/jwt/types";
 import SpoptifyProvider from "next-auth/providers/spotify";
+import { REFRESH_ACCESS_TOKEN_ERROR } from "../../../lib/constant";
 import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
 // import EmailProvider from "next-auth/providers/email"
 // import AppleProvider from "next-auth/providers/apple"
 
-interface UserAccessToken extends JWT {
+export interface AccessTokenContext {
   accessToken?: string;
   refreshToken?: string;
   username?: string;
-  accessTokenExpires: number;
+  accessTokenExpires?: number;
+  error?: string;
 }
 
 // For more information on each option (and a full list of options) go to
@@ -98,7 +100,9 @@ export default NextAuth({
     // async signIn({ user, account, profile, email, credentials }) { return true },
     // async redirect({ url, baseUrl }) { return baseUrl },
     async session({ session, token, user }) {
-        console.log("session -  token -" + JSON.stringify(token) + " token -" + token);
+      console.log(
+        "session -  token -" + JSON.stringify(token) + " token -" + token
+      );
       if (token.accessToken) {
         const thisuser = {
           ...session.user,
@@ -112,8 +116,8 @@ export default NextAuth({
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-    // The arguments user, account, profile and isNewUser are only passed the first time this callback is called on a new session
-    //. In subsequent calls, only token will be available
+      // The arguments user, account, profile and isNewUser are only passed the first time this callback is called on a new session
+      //. In subsequent calls, only token will be available
 
       if (account && user) {
         return {
@@ -123,13 +127,13 @@ export default NextAuth({
           username: account.providerAccountId,
           accessTokenExpires: account.expires_at
             ? account.expires_at * 1000
-            : 0 
+            : 0,
         };
       }
-      if(token.accessToken && token.accessTokenExpires) 
-      {
-      if (Date.now() < Number(token.accessTokenExpires)) {
-          return await refreshAccessToken(token as UserAccessToken);
+      console.log("JWT " + token.accessTokenExpires + " " + Date.now());
+      if (token.accessToken && token.accessTokenExpires) {
+        if (Date.now() < Number(token.accessTokenExpires)) {
+          return await refreshAccessToken(token);
         }
       }
       return token;
@@ -145,29 +149,30 @@ export default NextAuth({
 });
 
 async function refreshAccessToken(
-  token: UserAccessToken
-): Promise<UserAccessToken> {
+  token: JWT
+): Promise<JWT & AccessTokenContext> {
   try {
     if (!token.accessToken || !token.refreshToken) {
       throw new Error("Token can not be undefined");
     }
 
-    spotifyApi.setAccessToken(token.accessToken);
-    spotifyApi.setRefreshToken(token.refreshToken);
+    spotifyApi.setAccessToken(token.accessToken as string);
+    spotifyApi.setRefreshToken(token.refreshToken as string);
 
     const { body: refreshedToken } = await spotifyApi.refreshAccessToken();
     return {
       ...token,
       accessToken: refreshedToken.access_token,
       accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
-      refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
+      refreshToken:
+        refreshedToken.refresh_token ?? (token.refreshToken as string),
     };
   } catch (error) {
     console.log(error);
 
     return {
       ...token,
-      error: "RefreshAccessTokenError",
+      error: REFRESH_ACCESS_TOKEN_ERROR,
     };
   }
 }

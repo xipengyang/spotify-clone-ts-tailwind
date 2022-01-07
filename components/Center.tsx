@@ -1,8 +1,10 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const Center: React.FC = () => {
   const { data: session } = useSession();
+
   return (
     <div className="flex-grow text-white">
       <header className="absolute top-5 right-8">
