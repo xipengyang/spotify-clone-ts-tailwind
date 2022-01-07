@@ -4,6 +4,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 Uses Next-Auth 4.0.0
 
+Recoil JS for state
+
 
 ## Getting Started
 

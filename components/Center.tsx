@@ -1,9 +1,27 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { playlistIdState, playlistState } from "../atoms/playlistAtom";
+import useSpotify from "../hooks/useSpotify";
 
 const Center: React.FC = () => {
   const { data: session } = useSession();
+  const spotifyApi = useSpotify();
+  const playlistId = useRecoilValue(playlistIdState);
+  const [playlist, setPlaylist] =
+    useRecoilState<SpotifyApi.SinglePlaylistResponse | null>(playlistState);
+
+  useEffect(() => {
+    const fetchPlaylist = async (playlistId: string) => {
+      const data = await spotifyApi.getPlaylist(playlistId);
+      setPlaylist(data.body);
+    };
+
+    if (spotifyApi && spotifyApi.getAccessToken()) {
+      fetchPlaylist(playlistId).catch(console.error);
+    }
+  }, [spotifyApi, playlistId]);
 
   return (
     <div className="flex-grow text-white">
@@ -17,8 +35,20 @@ const Center: React.FC = () => {
         )}
       </header>
       <section className="h-80 space-x-7 bg-gradient-to-b to-black from-red-500 p-8 items-end flex">
-        <h1>hello</h1>
+        <img
+          className="w-44 h-44 shadow-2xl"
+          src={playlist?.images[0]?.url}
+        ></img>
+        <div>
+          <p>PLAYLIST</p>
+          <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold">
+            {playlist?.name}
+          </h1>
+        </div>
       </section>
+      <div>
+        {/* <Songs></Songs> */}
+      </div>
     </div>
   );
 };

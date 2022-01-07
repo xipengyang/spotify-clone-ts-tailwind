@@ -8,7 +8,9 @@ import {
 } from "@heroicons/react/outline";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
+import { playlistIdState } from "../atoms/playlistAtom";
 import useSpotify from "../hooks/useSpotify";
 
 const Sidebar = () => {
@@ -18,16 +20,16 @@ const Sidebar = () => {
     useState<SpotifyApi.PlaylistObjectSimplified[]>();
   const spotifyApi = useSpotify();
 
-  const [playlistId, setPlaylistId] = useState("");
+  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
 
   useEffect(() => {
-    const fetchPlaylist = async () => {
+    const fetchUserPlaylists = async () => {
       const data = await spotifyApi.getUserPlaylists();
       setPlaylists(data.body.items);
     };
 
     if (spotifyApi && spotifyApi.getAccessToken()) {
-      fetchPlaylist().catch(console.error);
+      fetchUserPlaylists().catch(console.error);
     }
   }, [spotifyApi, session]);
 
