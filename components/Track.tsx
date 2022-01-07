@@ -1,3 +1,8 @@
+import { useRecoilState } from "recoil";
+import { currentTrackIdState, isPlayingState } from "../atoms/songAtom";
+import useSpotify from "../hooks/useSpotify";
+import spotifyApi from "../lib/spotify";
+
 type Props = SpotifyApi.TrackObjectFull & { index: number };
 
 function prettyTime(ms: number) {
@@ -25,10 +30,31 @@ export const Track: React.FC<Props> = ({
   album,
   artists,
   duration_ms,
+  id,
+  uri,
   index,
 }: Props) => {
+  const spotifyApi = useSpotify();
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState);
+
+  const playSong = () => {
+    if (spotifyApi && spotifyApi.getAccessToken()) {
+      setCurrentTrackId(id);
+      setIsPlaying(true);
+      // requires premium
+      //   spotifyApi.play({
+      //     uris: [uri],
+      //   });
+    }
+  };
+
   return (
-    <div className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer">
+    <div
+      className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer"
+      onClick={playSong}
+    >
       <div className="flex items-center space-x-4">
         <p>{index + 1}</p>
         <img className="h-10 w-10" src={album.images[0].url} alt=""></img>

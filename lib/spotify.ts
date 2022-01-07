@@ -1,5 +1,4 @@
 import SpotifyWebApi from "spotify-web-api-node";
-import { URLSearchParams } from "url";
 
 const scopes = [
     "streaming",

@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Center from "../components/Center";
+import Player from "../components/Player";
 import Sidebar from "../components/Sidebar";
 
 const Home: NextPage = () => {
@@ -15,6 +16,10 @@ const Home: NextPage = () => {
         <Sidebar></Sidebar>
         <Center />
       </main>
+
+      <div>
+        <Player />
+      </div>
     </div>
   );
 };
