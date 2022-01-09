@@ -15,8 +15,6 @@ const Player: React.FC = () => {
 
   const songInfo = useSongInfo();
 
-  console.log(songInfo);
-
   return (
     <div>
       <div>{songInfo && <img src={songInfo.album.images[0].url} alt="" />}</div>

@@ -8,7 +8,11 @@ const Playlist: React.FC = () => {
   return (
     <div className="px-8 space-y-1 pb-28">
       {playlist?.tracks.items.map((track, index) => (
-        <Track key={track.track.id} index={index} {...track.track}></Track>
+        <Track
+          key={track.track.id + index}
+          index={index}
+          {...track.track}
+        ></Track>
       ))}
     </div>
   );

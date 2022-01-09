@@ -130,9 +130,9 @@ export default NextAuth({
             : 0,
         };
       }
-      console.log("JWT " + token.accessTokenExpires + " " + Date.now());
+      const n = Date.now();
       if (token.accessToken && token.accessTokenExpires) {
-        if (Date.now() < Number(token.accessTokenExpires)) {
+        if (n > (token.accessTokenExpires as number)) {
           return await refreshAccessToken(token);
         }
       }

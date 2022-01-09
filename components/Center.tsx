@@ -18,11 +18,11 @@ const Center: React.FC = () => {
       const data = await spotifyApi.getPlaylist(playlistId);
       setPlaylist(data.body);
     };
-
     if (spotifyApi && spotifyApi.getAccessToken()) {
       fetchPlaylist(playlistId).catch(console.error);
     }
   }, [spotifyApi, playlistId]);
+
 
   return (
     <div className="flex-grow text-white">

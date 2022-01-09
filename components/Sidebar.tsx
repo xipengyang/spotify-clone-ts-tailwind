@@ -32,7 +32,6 @@ const Sidebar = () => {
     }
   }, [spotifyApi, session]);
 
-  console.log(playlists);
 
   return (
     <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex">
