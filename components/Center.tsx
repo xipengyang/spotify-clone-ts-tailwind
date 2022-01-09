@@ -25,7 +25,7 @@ const Center: React.FC = () => {
 
 
   return (
-    <div className="flex-grow text-white">
+    <div className="flex-grow text-white h-screen overflow-y-scroll scrollbar-hide">
       <header className="absolute top-5 right-8">
         {session && session.user && (
           <div className="flex items-center space-x-3 opacity-90 hover:opacity-80 cursor-pointer p-1 pr-2 rounded-full">
@@ -47,9 +47,7 @@ const Center: React.FC = () => {
           </h1>
         </div>
       </section>
-      <div>
-        <Playlist></Playlist>
-      </div>
+      <Playlist></Playlist>
     </div>
   );
 };

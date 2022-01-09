@@ -7,7 +7,7 @@ import Sidebar from "../components/Sidebar";
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-black h-screen overflow-y-scroll scrollbar-hide">
+    <div className="bg-black h-screen overflow-hidden scrollbar-hide">
       <Head>
         <title>Create Next App with Tailwind</title>
         <link rel="icon" href="/favicon.ico" />
@@ -18,9 +18,9 @@ const Home: NextPage = () => {
         <Center />
       </main>
 
-      <div>
+      <footer className="sticky bottom-0">
         <Player />
-      </div>
+      </footer>
     </div>
   );
 };

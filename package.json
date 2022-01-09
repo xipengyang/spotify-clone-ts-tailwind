@@ -19,6 +19,7 @@
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.178",
     "@types/node": "17.0.1",
     "@types/react": "17.0.37",
     "@types/spotify-web-api-node": "^5.0.4",
